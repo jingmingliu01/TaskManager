@@ -38,3 +38,15 @@
     </table>
 </body>
 </html>
+
+<div class="pagination">
+    {% if tasks.has_previous %}
+        <a href="?page={{ tasks.previous_page_number }}">Previous</a>
+    {% endif %}
+
+    <span>Page {{ tasks.number }} of {{ tasks.paginator.num_pages }}</span>
+
+    {% if tasks.has_next %}
+        <a href="?page={{ tasks.next_page_number }}">Next</a>
+    {% endif %}
+</div>
