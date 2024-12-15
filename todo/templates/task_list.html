@@ -1,52 +1,56 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Task List</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-</head>
-<body>
-    <h1>Task List</h1>
+{% extends 'base.html' %}
+
+{% block title %}Task List{% endblock %}
+
+{% block content %}
+    <h2>Task List</h2>
+
+    <form method="get" action="">
+        <input type="text" name="q" value="{{ query }}" placeholder="Search by title" class="search-box">
+        <button type="submit">Search</button>
+        <a href="?today=true" class="today-btn">Today</a>
+    </form>
+
     <a href="{% url 'add_task' %}">Add New Task</a>
     <table>
         <thead>
-            <tr>
-                <th>Title</th>
-                <th>Description</th>
-                <th>Start Time</th>
-                <th>End Time</th>
-                <th>Duration (hours)</th>
-                <th>Actions</th>
-            </tr>
+        <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Duration (hours)</th>
+            <th>Actions</th>
+        </tr>
         </thead>
         <tbody>
-            {% for task in tasks %}
-                <tr>
-                    <td>{{ task.title }}</td>
-                    <td>{{ task.description }}</td>
-                    <td>{{ task.start_time }}</td>
-                    <td>{{ task.end_time }}</td>
-                    <td>{{ task.duration }}</td>
-                    <td>
-                        <a href="{% url 'edit_task' task.id %}">Edit</a> |
-                        <a href="{% url 'delete_task' task.id %}">Delete</a>
-                    </td>
-                </tr>
-            {% endfor %}
+        {% for task in tasks %}
+            <tr>
+                <td>{{ task.title }}</td>
+                <td>{{ task.description }}</td>
+                <td>{{ task.start_time }}</td>
+                <td>{{ task.end_time }}</td>
+                <td>{{ task.duration }}</td>
+                <td>
+                    <a href="{% url 'edit_task' task.id %}">Edit</a> |
+                    <a href="{% url 'delete_task' task.id %}">Delete</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6">No tasks found.</td>
+            </tr>
+        {% endfor %}
         </tbody>
     </table>
-</body>
-</html>
 
-<div class="pagination">
+    <div class="pagination">
     {% if tasks.has_previous %}
-        <a href="?page={{ tasks.previous_page_number }}">Previous</a>
+        <a href="?{% if query %}q={{ query }}&{% endif %}page={{ tasks.previous_page_number }}{% if today %}&today=true{% endif %}">Previous</a>
     {% endif %}
-
     <span>Page {{ tasks.number }} of {{ tasks.paginator.num_pages }}</span>
-
     {% if tasks.has_next %}
-        <a href="?page={{ tasks.next_page_number }}">Next</a>
+        <a href="?{% if query %}q={{ query }}&{% endif %}page={{ tasks.next_page_number }}{% if today %}&today=true{% endif %}">Next</a>
     {% endif %}
-</div>
+    </div>
+{% endblock %}
