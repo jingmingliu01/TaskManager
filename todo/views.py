@@ -10,7 +10,7 @@ def task_list(request):
     today = request.GET.get('today') # get the today query from the request
     tasks = Task.objects.all().order_by('start_time') # Query the Task model to get all tasks, ordered by start_time
     if today:
-        now = timezone.now().date()  # 获取今天的日期
+        now = timezone.now().date()  # get the current date
         tasks = tasks.filter(start_time__date__lte=now, end_time__date__gte=now)
     if query:
         tasks = tasks.filter(title__icontains=query) # filter the tasks by the search query
